@@ -5,7 +5,7 @@ import os
 import re
 import time
 
-from dotenv import load_dotenv
+
 from google import genai
 from google.genai import errors
 
@@ -19,15 +19,11 @@ st.set_page_config(
     layout="wide"
 )
 
-load_dotenv()
 
-gemini_key = os.getenv("GEMINI_API_KEY")
+gemini_key = st.secrets.get("GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY")
 
 if not gemini_key:
-    st.error(
-        "GEMINI_API_KEY not found. "
-        "Please add it to your .env file."
-    )
+    st.error("Gemini API key not found. Configure GEMINI_API_KEY in Streamlit Secrets.")
     st.stop()
 
 client = genai.Client(api_key=gemini_key)
